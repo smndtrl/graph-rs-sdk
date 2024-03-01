@@ -880,6 +880,7 @@ impl OAuth {
         }
     }
 
+    #[cfg(feature = "blocking")]
     pub fn build(&mut self) -> GrantSelector<AccessTokenGrant> {
         GrantSelector {
             oauth: self.clone(),
@@ -1261,6 +1262,7 @@ pub struct GrantSelector<T> {
     t: PhantomData<T>,
 }
 
+#[cfg(feature = "blocking")]
 impl GrantSelector<AccessTokenGrant> {
     /// Create a new instance for token flow.
     ///
@@ -1569,6 +1571,7 @@ impl AuthorizationRequest {
     }
 }
 
+#[cfg(feature = "blocking")]
 #[derive(Debug)]
 pub struct AccessTokenRequest {
     uri: String,
@@ -1576,6 +1579,7 @@ pub struct AccessTokenRequest {
     error: Option<GraphFailure>,
 }
 
+#[cfg(feature = "blocking")]
 impl AccessTokenRequest {
     /// Send the request for an access token. If successful, the Response body
     /// should be an access token which you can convert to [AccessToken]
@@ -1788,11 +1792,13 @@ impl AsRef<OAuth> for ImplicitGrant {
     }
 }
 
+#[cfg(feature = "blocking")]
 pub struct DeviceCodeGrant {
     oauth: OAuth,
     grant: GrantType,
 }
 
+#[cfg(feature = "blocking")]
 impl DeviceCodeGrant {
     pub fn authorization_url(&mut self) -> Result<Url, GraphFailure> {
         self.oauth
@@ -2022,12 +2028,14 @@ impl AsyncDeviceCodeGrant {
     }
 }
 
+#[cfg(feature = "blocking")]
 #[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize)]
 pub struct AccessTokenGrant {
     oauth: OAuth,
     grant: GrantType,
 }
 
+#[cfg(feature = "blocking")]
 impl AccessTokenGrant {
     pub fn authorization_url(&mut self) -> Result<Url, GraphFailure> {
         self.oauth
@@ -2349,18 +2357,21 @@ impl AsyncAccessTokenGrant {
     }
 }
 
+#[cfg(feature = "blocking")]
 impl From<AccessTokenGrant> for OAuth {
     fn from(token_grant: AccessTokenGrant) -> Self {
         token_grant.oauth
     }
 }
 
+#[cfg(feature = "blocking")]
 impl AsRef<OAuth> for AccessTokenGrant {
     fn as_ref(&self) -> &OAuth {
         &self.oauth
     }
 }
 
+#[cfg(feature = "blocking")]
 impl AsMut<OAuth> for AccessTokenGrant {
     fn as_mut(&mut self) -> &mut OAuth {
         &mut self.oauth

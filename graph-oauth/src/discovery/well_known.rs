@@ -4,6 +4,7 @@ use graph_error::GraphResult;
 pub struct WellKnown;
 
 impl WellKnown {
+    #[cfg(feature = "blocking")]
     pub fn signing_keys<T>(url: &str) -> GraphResult<T>
     where
         for<'de> T: serde::Deserialize<'de>,

@@ -42,6 +42,7 @@ pub struct JWTKeys {
 }
 
 impl JWTKeys {
+    #[cfg(feature = "blocking")]
     pub fn discovery() -> GraphResult<JWTKeys> {
         let client = reqwest::blocking::Client::new();
         let response = client

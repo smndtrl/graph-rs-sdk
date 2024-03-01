@@ -43,7 +43,7 @@ graph-core = { path = "./graph-core", version = "0.4.2" }
 
 [features]
 default = ["native-tls", "blocking"]
-blocking = ["reqwest/blocking"]
+blocking = ["reqwest/blocking", "graph-oauth/blocking", "graph-http/blocking"]
 native-tls = ["reqwest/native-tls", "graph-http/native-tls", "graph-oauth/native-tls"]
 rustls-tls = ["reqwest/rustls-tls", "graph-http/rustls-tls", "graph-oauth/rustls-tls"]
 brotli = ["reqwest/brotli", "graph-http/brotli", "graph-oauth/brotli"]

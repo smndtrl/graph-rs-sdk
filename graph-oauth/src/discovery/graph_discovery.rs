@@ -78,6 +78,7 @@ impl GraphDiscovery {
         }
     }
 
+    #[cfg(feature = "blocking")]
     /// Get the public keys used by the Microsoft identity platform
     /// to sign security tokens.
     ///
@@ -112,6 +113,7 @@ impl GraphDiscovery {
         Ok(t)
     }
 
+    #[cfg(feature = "blocking")]
     /// Automatically convert the public keys used by the Microsoft identity platform
     /// to sign security tokens into an OAuth object. This will get the common urls
     /// for authorization and access tokens and insert them into OAuth.
