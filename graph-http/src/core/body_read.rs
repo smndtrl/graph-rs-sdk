@@ -8,6 +8,7 @@ use std::io::{BufReader, Read};
 
 pub struct BodyRead {
     buf: String,
+    #[cfg(feature = "blocking")]
     blocking_body: Option<reqwest::blocking::Body>,
     async_body: Option<reqwest::Body>,
 }
@@ -16,6 +17,7 @@ impl BodyRead {
     pub fn new(buf: String) -> BodyRead {
         BodyRead {
             buf,
+            #[cfg(feature = "blocking")]
             blocking_body: None,
             async_body: None,
         }
@@ -31,7 +33,8 @@ impl BodyRead {
         reader.read_to_string(&mut buf)?;
         Ok(BodyRead::new(buf))
     }
-
+    
+    #[cfg(feature = "tokio-io")]
     pub async fn from_async_read<T: tokio::io::AsyncReadExt + Unpin>(
         mut reader: T,
     ) -> GraphResult<BodyRead> {
@@ -51,6 +54,7 @@ impl From<BodyRead> for reqwest::Body {
     }
 }
 
+#[cfg(feature = "blocking")]
 impl From<BodyRead> for reqwest::blocking::Body {
     fn from(upload: BodyRead) -> Self {
         if let Some(body) = upload.blocking_body {
@@ -83,6 +87,7 @@ impl TryFrom<std::fs::File> for BodyRead {
     }
 }
 
+#[cfg(feature = "tokio-io")]
 #[async_trait]
 impl AsyncTryFrom<tokio::fs::File> for BodyRead {
     type Error = GraphFailure;
@@ -112,12 +117,14 @@ impl From<reqwest::Body> for BodyRead {
     fn from(body: Body) -> Self {
         BodyRead {
             buf: Default::default(),
+            #[cfg(feature = "blocking")]
             blocking_body: None,
             async_body: Some(body),
         }
     }
 }
 
+#[cfg(feature = "blocking")]
 impl From<reqwest::blocking::Body> for BodyRead {
     fn from(body: reqwest::blocking::Body) -> Self {
         BodyRead {

@@ -24,6 +24,7 @@ pub async fn create_dir_async<P: AsRef<Path>>(directory: P) -> Result<(), std::i
     Ok(())
 }
 
+#[cfg(feature = "blocking")]
 pub fn copy(
     path: PathBuf,
     mut response: reqwest::blocking::Response,

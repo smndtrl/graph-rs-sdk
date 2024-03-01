@@ -1,0 +1,7 @@
+{
+    "rust-analyzer.cargo.target": "wasm32-wasi",
+    "rust-analyzer.cargo.features": [
+        ""
+    ],
+    "rust-analyzer.cargo.noDefaultFeatures": true
+}

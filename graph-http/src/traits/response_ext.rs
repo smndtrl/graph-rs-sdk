@@ -1,6 +1,10 @@
 use crate::core::BodyRead;
 use crate::internal::{
-    copy_async, create_dir_async, FileConfig, HttpResponseBuilderExt, RangeIter, UploadSession,
+    FileConfig, HttpResponseBuilderExt, RangeIter, UploadSession,
+};
+#[cfg(feature = "tokio-io")]
+use crate::internal::{
+    copy_async, create_dir_async, 
 };
 use crate::traits::UploadSessionLink;
 use async_trait::async_trait;
@@ -188,6 +192,7 @@ pub trait ResponseExt {
         reader: impl AsyncReadExt + Send + Unpin,
     ) -> GraphResult<UploadSession>;
 
+    #[cfg(feature = "tokio-io")]
     /// # Downloads the content of the HTTP response and saves it to a file.<br>
     ///
     /// This method takes a `file_config` object containing various parameters that control how the
@@ -339,8 +344,8 @@ pub trait ResponseExt {
 #[async_trait]
 impl ResponseExt for reqwest::Response {
     async fn job_status(&self) -> Option<GraphResult<Response>> {
-        let url = self
-            .headers()
+        let headers = self.headers();
+        let url = headers
             .get(reqwest::header::LOCATION)?
             .to_str()
             .ok()?;
@@ -514,6 +519,7 @@ impl ResponseExt for reqwest::Response {
         ))
     }
 
+    #[cfg(feature = "tokio-io")]
     /// # Downloads the content of the HTTP response and saves it to a file.<br>
     ///
     /// This method takes a `file_config` object containing various parameters that control how the
@@ -646,7 +652,7 @@ impl ResponseExt for reqwest::Response {
         }
 
         let path = {
-            if let Some(name) = file_name.or_else(|| parse_content_disposition(self.headers())) {
+            if let Some(name) = file_name.or_else(|| parse_content_disposition(&self.headers())) {
                 if name.len() > MAX_FILE_NAME_LEN {
                     return Err(AsyncDownloadError::FileNameTooLong);
                 }
@@ -738,6 +744,7 @@ impl BodyExt for reqwest::Body {
     }
 }
 
+#[cfg(feature = "blocking")]
 impl BodyExt for reqwest::blocking::Body {
     fn into_body(self) -> GraphResult<BodyRead> {
         Ok(BodyRead::from(self))
