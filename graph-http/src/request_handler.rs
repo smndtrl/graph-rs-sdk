@@ -1,3 +1,4 @@
+#[cfg(feature = "blocking")]
 use crate::blocking::BlockingRequestHandler;
 use crate::internal::{
     BodyRead, Client, GraphClientConfiguration, HttpResponseBuilderExt, ODataNextLink, ODataQuery,
@@ -53,6 +54,7 @@ impl RequestHandler {
         }
     }
 
+    #[cfg(feature = "blocking")]
     pub fn into_blocking(self) -> BlockingRequestHandler {
         BlockingRequestHandler::new(
             self.client_builder

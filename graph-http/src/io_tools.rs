@@ -6,6 +6,7 @@ use std::{
     sync::mpsc,
     thread,
 };
+#[cfg(not(target_arch = "wasm32"))]
 use tokio::io::AsyncWriteExt;
 
 pub fn create_dir<P: AsRef<Path>>(directory: P) -> Result<(), std::io::Error> {
@@ -15,6 +16,7 @@ pub fn create_dir<P: AsRef<Path>>(directory: P) -> Result<(), std::io::Error> {
     Ok(())
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 pub async fn create_dir_async<P: AsRef<Path>>(directory: P) -> Result<(), std::io::Error> {
     if !directory.as_ref().exists() {
         tokio::fs::create_dir_all(directory).await?;
@@ -42,6 +44,7 @@ pub fn copy(
     receiver.recv()?.ok_or(ThreadedIoError::NoPath)
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 pub async fn copy_async(
     path: PathBuf,
     response: reqwest::Response,

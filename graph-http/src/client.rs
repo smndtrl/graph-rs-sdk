@@ -1,3 +1,4 @@
+#[cfg(feature = "blocking")]
 use crate::blocking::BlockingClient;
 use crate::traits::ODataQuery;
 
@@ -166,6 +167,7 @@ impl GraphClientConfiguration {
         }
     }
 
+    #[cfg(feature = "blocking")]
     pub(crate) fn build_blocking(self) -> BlockingClient {
         let headers = self.config.headers.clone();
         let mut builder = reqwest::blocking::ClientBuilder::new()

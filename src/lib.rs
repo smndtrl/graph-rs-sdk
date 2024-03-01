@@ -314,12 +314,15 @@ pub mod http {
     };
     pub use graph_http::traits::{
         AsyncIterator, HttpResponseBuilderExt, HttpResponseExt, ODataDeltaLink, ODataDownloadLink,
-        ODataMetadataLink, ODataNextLink, ODataQuery, ResponseBlockingExt, ResponseExt,
+        ODataMetadataLink, ODataNextLink, ODataQuery, ResponseExt,
         UploadSessionLink,
     };
+    #[cfg(feature = "blocking")]
+    pub use graph_http::traits::ResponseBlockingExt;
     pub use reqwest::tls::Version;
     pub use reqwest::{Body, Method};
 
+    #[cfg(feature = "blocking")]
     pub mod blocking {
         pub use graph_http::api_impl::UploadSessionBlocking;
         pub use reqwest::blocking::Body;

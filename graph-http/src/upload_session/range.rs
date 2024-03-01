@@ -85,6 +85,7 @@ impl RangeIter {
         Some((header_map, reqwest::Body::from(range.body())))
     }
 
+    #[cfg(feature = "blocking")]
     pub(crate) fn pop_front_blocking(&mut self) -> Option<(HeaderMap, reqwest::blocking::Body)> {
         let range = self.dequeue.pop_front()?;
 
@@ -113,6 +114,7 @@ impl RangeIter {
         Some(comp)
     }
 
+    #[cfg(feature = "blocking")]
     pub(crate) fn map_all_blocking(&mut self) -> Option<Vec<(HeaderMap, reqwest::blocking::Body)>> {
         let mut comp = Vec::new();
         while let Some(value) = self.pop_front_blocking() {

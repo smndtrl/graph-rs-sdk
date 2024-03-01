@@ -18,19 +18,27 @@ futures = "0.3.28"
 handlebars = "2.0.4"
 http = "0.2.9"
 percent-encoding = "2"
-reqwest = { version = "0.11.16", default-features=false, features = ["json", "gzip", "blocking", "stream"] }
+reqwest = { version = "0.11.16", default-features=false, features = ["json", "gzip", "stream"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 serde_urlencoded = "0.7.1"
 thiserror = "1"
-tokio = { version = "1.27.0", features = ["full"] }
 url = { version = "2", features = ["serde"] }
+
 
 graph-error = { path = "../graph-error"  }
 graph-core = { path = "../graph-core" }
 
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1.27.0", features = ["full"] }
+
+[target.'cfg(all(target_arch = "wasm32", target_os = "wasi"))'.dependencies]
+tokio = { version = "1.25.0", default-features = false, features = [ "sync", "io-util", "rt"] }
+
+
 [features]
-default = ["native-tls"]
+default = ["native-tls", "blocking"]
+blocking = ["reqwest/blocking"]
 native-tls = ["reqwest/native-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
 brotli = ["reqwest/brotli"]
