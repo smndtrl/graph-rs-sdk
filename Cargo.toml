@@ -50,7 +50,7 @@ graph-core = { path = "./graph-core", version = "2.0.0", default-features=false 
 
 
 [features]
-default = ["native-tls"]
+default = ["native-tls", "fs"]
 native-tls = ["reqwest/native-tls", "graph-http/native-tls", "graph-oauth/native-tls", "graph-core/native-tls"]
 rustls-tls = ["reqwest/rustls-tls", "graph-http/rustls-tls", "graph-oauth/rustls-tls", "graph-core/rustls-tls"]
 brotli = ["reqwest/brotli", "graph-http/brotli", "graph-oauth/brotli", "graph-core/brotli"]
@@ -59,6 +59,7 @@ trust-dns = ["reqwest/trust-dns", "graph-http/trust-dns", "graph-oauth/trust-dns
 openssl = ["graph-oauth/openssl"]
 interactive-auth = ["graph-oauth/interactive-auth"]
 test-util = ["graph-http/test-util"]
+fs = [ "graph-http/fs" ]
 
 [workspace.dependencies]
 reqwest = { version = "0.12", default-features = false}

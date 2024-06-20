@@ -1,7 +1,11 @@
 use crate::blocking::UploadSessionBlocking;
 use crate::internal::{
-    copy, create_dir, parse_content_disposition, FileConfig, HttpResponseBuilderExt, RangeIter,
+    parse_content_disposition, FileConfig, HttpResponseBuilderExt, RangeIter,
     UploadSessionLink, MAX_FILE_NAME_LEN,
+};
+#[cfg(feature = "fs")]
+use crate::internal::{
+    copy, create_dir,
 };
 use graph_error::download::BlockingDownloadError;
 use graph_error::{ErrorMessage, ErrorType, GraphFailure, GraphResult};
@@ -192,6 +196,7 @@ pub trait ResponseBlockingExt {
     ///     Ok(())
     /// }
     /// ```
+    #[cfg(feature = "fs")]
     fn download(
         self,
         file_config: &FileConfig,
@@ -431,6 +436,7 @@ impl ResponseBlockingExt for reqwest::blocking::Response {
     ///     Ok(())
     /// }
     /// ```
+    #[cfg(feature = "fs")]
     fn download(
         self,
         file_config: &FileConfig,

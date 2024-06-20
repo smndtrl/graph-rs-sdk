@@ -15,6 +15,7 @@ pub mod url;
 pub mod traits;
 
 /// Io utilities for creating directories and files.
+#[cfg(feature = "fs")]
 pub mod io_tools;
 
 #[allow(unused_imports)]
@@ -22,6 +23,7 @@ pub(crate) mod internal {
 
     pub use crate::client::*;
     pub use crate::core::*;
+    #[cfg(feature = "fs")]
     pub use crate::io_tools::*;
     pub use crate::request_components::*;
     pub use crate::request_handler::*;

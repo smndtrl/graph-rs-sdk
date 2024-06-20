@@ -1,5 +1,9 @@
 use crate::internal::{
-    copy_async, create_dir_async, FileConfig, HttpResponseBuilderExt, RangeIter, UploadSession,
+    FileConfig, HttpResponseBuilderExt, RangeIter, UploadSession,
+};
+#[cfg(feature = "fs")]
+use crate::internal::{
+    copy_async, create_dir_async
 };
 use crate::traits::UploadSessionLink;
 use async_trait::async_trait;
@@ -300,6 +304,7 @@ pub trait ResponseExt {
     ///     Ok(())
     /// }
     /// ```
+    #[cfg(feature = "fs")]
     async fn download(
         self,
         file_config: &FileConfig,
@@ -626,6 +631,7 @@ impl ResponseExt for reqwest::Response {
     ///     Ok(())
     /// }
     /// ```
+    #[cfg(feature = "fs")]
     async fn download(
         self,
         file_config: &FileConfig,

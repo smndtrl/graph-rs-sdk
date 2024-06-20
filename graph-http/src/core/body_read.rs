@@ -76,6 +76,7 @@ impl<R: Read> TryFrom<BufReader<R>> for BodyRead {
     }
 }
 
+#[cfg(feature = "fs")]
 impl TryFrom<std::fs::File> for BodyRead {
     type Error = GraphFailure;
 
@@ -84,6 +85,7 @@ impl TryFrom<std::fs::File> for BodyRead {
     }
 }
 
+#[cfg(feature = "fs")]
 #[async_trait]
 impl AsyncTryFrom<tokio::fs::File> for BodyRead {
     type Error = GraphFailure;
@@ -129,6 +131,7 @@ impl From<reqwest::blocking::Body> for BodyRead {
     }
 }
 
+// #[cfg(feature = "fs")]
 impl TryFrom<FileConfig> for BodyRead {
     type Error = GraphFailure;
 
@@ -137,6 +140,7 @@ impl TryFrom<FileConfig> for BodyRead {
     }
 }
 
+// #[cfg(feature = "fs")]
 impl TryFrom<&FileConfig> for BodyRead {
     type Error = GraphFailure;
 
